@@ -13,5 +13,5 @@ export default function Home() {
     }
       fetching()
   }, []);
-  return <div>user: {user}</div>;
+  return <div>user2: {user}</div>;
 }
