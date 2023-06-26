@@ -15,6 +15,5 @@ jobs:
         env:
           LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
         run: |
-          cd my-app
           npm i -g @liara/cli@3
-          liara deploy --app="theapp" --api-token="$LIARA_TOKEN" --detach
+          liara deploy --app="my-app" --api-token="$LIARA_TOKEN" --detach
