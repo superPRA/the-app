@@ -1,17 +1,14 @@
-"use client"
+"use Server";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { loadEnvConfig } from  "@next/env"
+import { loadEnvConfig } from "@next/env";
+import Link from "next/link";
 
 export default function Home() {
-  const [user, setUser] = useState('loading')
-  useEffect(() => {
-    const fetching = async ()=>{
-      const res = await fetch('/api')
-      const data = await res.json()
-      setUser(data.user[0].name )
-    }
-      fetching()
-  }, []);
-  return <div>user4: {user}</div>;
+  return (
+    <div className="h-screen px-24 p-80 text-center">
+      <h1 >welcome to my website</h1>
+      <Link  href="/portfolio">enter</Link>
+    </div>
+  );
 }
