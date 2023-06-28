@@ -1,4 +1,3 @@
-import Sidebar from "@/components/Sidebar";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
 
@@ -16,7 +15,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className + ' bg-slate-100 '}>  
+      <body
+        className={
+          inter.className + " bg-lightprimary bg-center bg-cover min-h-screen"
+        }
+      >
         <main>{children}</main>
       </body>
     </html>

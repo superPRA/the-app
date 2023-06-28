@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+
 model spatial_ref_sys {
   srid      Int     @id
   auth_name String? @db.VarChar(256)
@@ -15,7 +15,25 @@ model spatial_ref_sys {
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
 }
-model users {
-  id Int @id
-  name String 
+model Accounts {
+  id String @id @unique @default(uuid())
+  username String @unique
+  email String @unique
+  password String 
+  firstName String? 
+  lastName String?
+  age Int?
+  auth Auth?
+  avatarImag String?
+  cr DateTime
+  up DateTime
 }
+
+model Auth {
+  accounts Accounts @relation(fields: [authId], references: [id])
+  cr DateTime 
+  token String? @unique
+  ex DateTime  
+  authId String @unique
+}
+

@@ -1,57 +1,30 @@
 import Image from "next/image";
 import uuid from "react-uuid";
-import { GoArchive } from "react-icons/go";
-import { RxDashboard } from "react-icons/rx"
+import SidebarNavs from "./SidebarNavs";
+import { navbarMlst } from "@/data/new";
 import Link from "next/link";
 
 export default function Sidebar() {
-  const navbar = [
-    {
-      icon: <RxDashboard />,
-      title: "Dashboard",
-      link: "/dashboard",
-      subIcon: "",
-    },
-    {
-      icon: <GoArchive />,
-      title: "Portfolio",
-      link: "/portfolio",
-      subIcon: "",
-    },
-  ];
   return (
-    <div className="fixed top-0 left-0 w-80 bg-white bottom-0 flex flex-col px-4">
-      <div className="flex gap-4 items-end py-12">
-        <Image
-          className="rounded-full border-2 border-gray-400 w-16"
-          src="/5556512.png"
-          alt="avatar"
-          width={1000}
-          height={1000}
-        />
-        <div>
-          <h6 className="text-[10px] text-neutral-400 font-semibold">
-            Good Day
-          </h6>
-          <h1 className="text-2xl font-bold text-neutral-700">
-            Pooriya Mosavy
-          </h1>
-        </div>
+    <div className="fixed top-0 text-center left-0 w-24 bg-white bg-opacity-30 gap-8 backdrop-blur-lg bottom-0 flex flex-col px-4 py-8 rounded-r-[2rem]">
+      <div className="mx-auto">
+        <Link href='my-account'>
+          <Image
+            className="bg-blue-200 border-4 rounded-full"
+            alt="avatar"
+            src="/5556512.png"
+            width={100}
+            height={100}
+          />
+        </Link>
       </div>
       <hr />
-      <div className="">
-        <h1 className="font-semibold text-gray-700 py-2">navbar: 1</h1>
-        <div className="flex flex-col py-2">
-          {navbar.map((item) => {
+      <div>
+        <span>Menu: 6</span>
+        <div className="flex flex-col items-center py-4 text-3xl">
+          {navbarMlst.map(({ icon, link, subIcon, title }) => {
             return (
-              <Link
-                className="flex items-center gap-3 hover:bg-indigo-500 hover:text-white transition-all duration-200 p-3 rounded-xl"
-                href={item.link}
-                key={uuid()}
-              >
-                <i className="text-3xl">{item.icon}</i>
-                <span className="text-xl">{item.title}</span>
-              </Link>
+              <SidebarNavs {...{icon,link,subIcon,title}} key={uuid()} />
             );
           })}
         </div>

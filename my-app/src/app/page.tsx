@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="h-screen px-24 p-80 text-center">
       <h1 >welcome to my website</h1>
-      <Link  href="/portfolio">enter</Link>
+      <Link  href="/dashboard">enter</Link>
     </div>
   );
 }
