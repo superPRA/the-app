@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../prisma/prisma";
 import { randomUUID } from "crypto";
+import { getBd } from "../../methods/request";
 
 export async function POST(request: Request) {
   const bd = await getBd(request);
@@ -41,9 +42,4 @@ export async function POST(request: Request) {
   return NextResponse.json({ token: account.auth.token });
 }
 
-async function getBd(request: Request) {
-  return await request
-    .json()
-    .then((res) => res)
-    .catch((err) => null);
-}
+
