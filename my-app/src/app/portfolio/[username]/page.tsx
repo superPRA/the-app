@@ -11,7 +11,7 @@ export default function UserName(a: any) {
 
 async function getStaticPaths(context: GetStaticPathsContext) {
   const usernames: string[] = await axios
-    .get("http://localhost:3000/api/accounts/getAllUsernames")
+    .get(`/api/accounts/getAllUsernames`)
     .then((res) => res.data.usernames);
   return {
     paths: usernames.map((item) => {

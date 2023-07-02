@@ -22,7 +22,7 @@ export default function SidebarNavs({
     queryKey: ["account"],
     queryFn: async () => {
       return await axios({
-        url: `http://localhost:3000/api/accounts/loadData?token=${token}`,
+        url: `/api/accounts/loadData?token=${token}`,
         method: "get",
       }).then((res) => res.data.account);
     },

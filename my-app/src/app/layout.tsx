@@ -1,6 +1,7 @@
-import Providers from "@/RQ/provider";
+import { Providers as RQprovider } from "@/RQ/provider";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
+import { Providers as ReduxProvider } from "@/redux/provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,9 +21,9 @@ export default function RootLayout({
           inter.className + " bg-lightprimary bg-center bg-cover min-h-screen"
         }
       >
-        <Providers>
-          {children}
-        </Providers>
+        <RQprovider>
+          <ReduxProvider>{children}</ReduxProvider>
+        </RQprovider>
       </body>
     </html>
   );

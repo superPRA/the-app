@@ -21,7 +21,7 @@ export default function Login() {
     mutationKey: ["token"],
     mutationFn: async () => {
       return await axios({
-        url: "http://localhost:3000/api/accounts/login",
+        url: "/api/accounts/login",
         method: "post",
         data: {
           ...formik.values,
@@ -37,7 +37,7 @@ export default function Login() {
     queryKey: ["account"],
     queryFn: async (context) => {
       return await axios({
-        url: `http://localhost:3000/api/accounts/loadData?token=${token}`,
+        url: `/api/accounts/loadData?token=${token}`,
         method: "get",
       }).then((res) => res.data.account);
     },
