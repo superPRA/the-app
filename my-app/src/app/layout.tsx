@@ -1,6 +1,6 @@
+import Providers from "@/RQ/provider";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,7 +20,9 @@ export default function RootLayout({
           inter.className + " bg-lightprimary bg-center bg-cover min-h-screen"
         }
       >
-        <main>{children}</main>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

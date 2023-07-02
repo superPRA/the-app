@@ -1,11 +1,10 @@
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
+"use client"
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Portfolio() {
+export default function Loading() {
   const router = useRouter();
   const token = typeof localStorage !== "undefined" ? localStorage.getItem("token") : null;
   const {
@@ -23,9 +22,14 @@ export default function Portfolio() {
     enabled: !!token,
   });
   useEffect(() => {
-    if (!isLoading && account) {
-      router.replace("/portfolio/"+account.username);
+    if (!token || (!isLoading && !account) || isError) {
+      router.replace("/dashboard/login");
     }
-  }, [account, isLoading, router]);
-  return <div>portfolio</div>;
+  }, [token, router, isLoading, account, isError]);
+  if(!isLoading) return null
+  return (
+    <div className="flex justify-center items-center fixed top-0 left-0 w-full h-screen backdrop-blur-md z-10">
+      loading...
+    </div>
+  );
 }

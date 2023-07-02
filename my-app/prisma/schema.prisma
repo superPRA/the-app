@@ -7,7 +7,68 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Accounts {
+  id         String    @id @unique @default(uuid())
+  username   String    @unique
+  email      String    @unique
+  password   String
+  firstName  String?
+  lastName   String?
+  age        Int?
+  avatarImag String?
+  cr         DateTime
+  up         DateTime
+  jobTitles  String[]
+  desc       String?
+  attr       Attr?
+  auth       Auth?
+  inbox      Inbox?
+  timeLine   TimeLine?
+}
 
+model Inbox {
+  receiver    String   @unique
+  senderName  String
+  senderEmail String
+  subject     String
+  massage     String
+  cr          DateTime @default(now())
+  accounts    Accounts @relation(fields: [receiver], references: [id])
+}
+
+model TimeLine {
+  timeLineId String   @unique
+  startDate  DateTime
+  endDate    DateTime
+  header1    String
+  header2    String
+  desc       String
+  cr         DateTime @default(now())
+  up         DateTime @default(now())
+  accounts   Accounts @relation(fields: [timeLineId], references: [id])
+}
+
+model Auth {
+  cr       DateTime @default(now())
+  token    String?  @unique
+  ex       DateTime
+  authId   String   @unique
+  accounts Accounts @relation(fields: [authId], references: [id])
+}
+
+model Attr {          
+  attrId   String   @unique
+  page     String
+  type     String
+  key      String
+  value    String
+  cr       DateTime @default(now())
+  icon     String?
+  up       DateTime @default(now())
+  accounts Accounts @relation(fields: [attrId], references: [id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model spatial_ref_sys {
   srid      Int     @id
   auth_name String? @db.VarChar(256)
@@ -15,25 +76,3 @@ model spatial_ref_sys {
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
 }
-model Accounts {
-  id String @id @unique @default(uuid())
-  username String @unique
-  email String @unique
-  password String 
-  firstName String? 
-  lastName String?
-  age Int?
-  auth Auth?
-  avatarImag String?
-  cr DateTime
-  up DateTime
-}
-
-model Auth {
-  accounts Accounts @relation(fields: [authId], references: [id])
-  cr DateTime 
-  token String? @unique
-  ex DateTime  
-  authId String @unique
-}
-

@@ -6,7 +6,9 @@ import { getBd } from "../../methods/request";
 export async function POST(request: Request) {
   const bd = await getBd(request);
   if (!bd || !bd?.username || !bd?.password) {
-    return NextResponse.json({ err: "username or password are not defined" });
+    return NextResponse.json<apiResponse>({
+      err: "username or password are not defined",
+    });
   }
   const account = await prisma.accounts.findUnique({
     where: {
@@ -17,10 +19,10 @@ export async function POST(request: Request) {
     },
   });
   if (!account) {
-    return NextResponse.json({ err: "no such username exist" });
+    return NextResponse.json<apiResponse>({ err: "no such username exist" }, {status: 404});
   }
   if (account.password !== bd.password) {
-    return NextResponse.json({ err: "password is wrong" });
+    return NextResponse.json<apiResponse>({ err: "password is wrong" }, {status: 405});
   }
   const now = new Date();
 
@@ -37,9 +39,15 @@ export async function POST(request: Request) {
         token: token,
       },
     });
-    return NextResponse.json({ token: auth.token });
+    return NextResponse.json<apiResponse>({ token: auth.token },{status: 200});
   }
-  return NextResponse.json({ token: account.auth.token });
+  return NextResponse.json<apiResponse>({ token: account.auth.token }, {status: 200});
 }
 
-
+type apiResponse = apiErrResponse | apiSuccessResponse;
+export type apiSuccessResponse = {
+  token: string | null;
+};
+export type apiErrResponse = {
+  err: string;
+};
