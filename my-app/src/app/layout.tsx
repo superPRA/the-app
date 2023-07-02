@@ -2,6 +2,7 @@ import { Providers as RQprovider } from "@/RQ/provider";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
 import { Providers as ReduxProvider } from "@/redux/provider";
+import Massage from "@/components/massage";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -22,7 +23,10 @@ export default function RootLayout({
         }
       >
         <RQprovider>
-          <ReduxProvider>{children}</ReduxProvider>
+          <ReduxProvider>
+            {children}
+            <Massage />
+          </ReduxProvider>
         </RQprovider>
       </body>
     </html>

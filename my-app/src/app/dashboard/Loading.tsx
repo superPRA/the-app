@@ -1,12 +1,16 @@
-"use client"
+"use client";
+import { useAppDispatch } from "@/redux/hooks";
+import { actions } from "@/redux/slices/masterSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Loading() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const token = typeof localStorage !== "undefined" ? localStorage.getItem("token") : null;
+  const token =
+    typeof localStorage !== "undefined" ? localStorage.getItem("token") : null;
   const {
     data: account,
     isLoading,
@@ -17,7 +21,16 @@ export default function Loading() {
       return await axios({
         url: `/api/accounts/loadData?token=${token}`,
         method: "get",
-      }).then((res) => res.data.account);
+      })
+        .then((res) => res.data.account)
+        .catch((err) => {
+          dispatch(
+            actions.setMassage({
+              message: err.response.data.err,
+              type: "error",
+            })
+          );
+        });
     },
     enabled: !!token,
   });
@@ -26,7 +39,7 @@ export default function Loading() {
       router.replace("/dashboard/login");
     }
   }, [token, router, isLoading, account, isError]);
-  if(!isLoading) return null
+  if (!isLoading) return null;
   return (
     <div className="flex justify-center items-center fixed top-0 left-0 w-full h-screen backdrop-blur-md z-10">
       loading...

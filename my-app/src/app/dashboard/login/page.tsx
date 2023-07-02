@@ -2,21 +2,21 @@
 
 import Input from "@/components/Input";
 import PasswordInput from "@/components/PasswordInput";
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useAppDispatch } from "@/redux/hooks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { VscLoading } from "react-icons/vsc";
+import Massage from "@/components/massage";
+import { actions } from "@/redux/slices/masterSlice";
 
 export default function Login() {
+  const dispatch = useAppDispatch();
   const queryclient = useQueryClient();
   const router = useRouter();
-  const token = queryclient.getQueryData(["token"]);
+  const token = queryclient.getQueryData<string | null>(["token"]);
   const tokenMutation = useMutation({
     mutationKey: ["token"],
     mutationFn: async () => {
@@ -26,29 +26,50 @@ export default function Login() {
         data: {
           ...formik.values,
         },
-      }).then((res) => res.data.token);
+      })
+        .then((res) => res.data.token)
+        .catch((err) => {
+          dispatch(
+            actions.setMassage({
+              message: err.response.data.err,
+              type: "error",
+            })
+          );
+        });
     },
     onSuccess: (data, _variables, _context) => {
       localStorage.setItem("token", data);
       queryclient.setQueryData(["token"], data);
     },
   });
-  const { data: account, isLoading,isInitialLoading } = useQuery({
+  const {
+    data: account,
+    isLoading,
+    isInitialLoading,
+  } = useQuery({
     queryKey: ["account"],
     queryFn: async (context) => {
       return await axios({
         url: `/api/accounts/loadData?token=${token}`,
         method: "get",
-      }).then((res) => res.data.account);
+      })
+        .then((res) => res.data.account)
+        .catch((err) => {
+          dispatch(
+            actions.setMassage({
+              message: err.response.data.err,
+              type: "error",
+            })
+          );
+        });
     },
     enabled: !!token,
   });
-  console.log({ account });
-  useEffect(()=>{
+  useEffect(() => {
     if (!isLoading && !!account) {
-      router.replace('/dashboard')
+      router.replace("/dashboard");
     }
-  },[account,isLoading, router])
+  }, [account, isLoading, router]);
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -58,7 +79,7 @@ export default function Login() {
       tokenMutation.mutate();
     },
   });
-  
+
   return (
     <div className="grid grid-cols-2">
       <div className="h-screen bg-white flex justify-center items-center">

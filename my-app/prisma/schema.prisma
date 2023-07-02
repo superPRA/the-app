@@ -20,6 +20,7 @@ model Accounts {
   up         DateTime
   jobTitles  String[]
   desc       String?
+  role       String?
   attr       Attr?
   auth       Auth?
   inbox      Inbox?
@@ -56,7 +57,7 @@ model Auth {
   accounts Accounts @relation(fields: [authId], references: [id])
 }
 
-model Attr {          
+model Attr {
   attrId   String   @unique
   page     String
   type     String

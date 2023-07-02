@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./slices/counterSlice"
+import masterSlice from "./slices/masterSlice";
 
 export const store = configureStore({
   reducer: {
-    counterReducer,
+    [masterSlice.name]: masterSlice.reducer 
   },
 });
 

@@ -1,5 +1,7 @@
-"use client"
+"use client";
 
+import { useAppDispatch } from "@/redux/hooks";
+import { actions } from "@/redux/slices/masterSlice";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
@@ -7,15 +9,30 @@ import { useRouter } from "next/navigation";
 import { VscLoading } from "react-icons/vsc";
 
 export default function SidebarAvatar() {
-    const router = useRouter();
-    const token = typeof localStorage !== "undefined" ? localStorage.getItem("token") : null;
-  const { data: account, isLoading, isError } = useQuery({
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const token =
+    typeof localStorage !== "undefined" ? localStorage.getItem("token") : null;
+  const {
+    data: account,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["account"],
     queryFn: async () => {
       return await axios({
         url: `/api/accounts/loadData?token=${token}`,
         method: "get",
-      }).then((res) => res.data.account);
+      })
+        .then((res) => res.data.account)
+        .catch((err) => {
+          dispatch(
+            actions.setMassage({
+              message: err.response.data.err,
+              type: "error",
+            })
+          );
+        });
     },
     enabled: !!token,
   });
