@@ -6,8 +6,8 @@ import { useAppDispatch } from "@/redux/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
 import Massage from "@/components/massage";
 import { actions } from "@/redux/slices/masterSlice";
@@ -15,9 +15,14 @@ import { actions } from "@/redux/slices/masterSlice";
 export default function Login() {
   const dispatch = useAppDispatch();
   const queryclient = useQueryClient();
+  const [token, setToken] = useState(null);
+  console.log({ token });
   const router = useRouter();
-  const token = queryclient.getQueryData<string | null>(["token"]);
-  const tokenMutation = useMutation({
+  const {
+    data: tokenData,
+    mutate: tokenMutate,
+    isLoading: isTokenLoading,
+  } = useMutation({
     mutationKey: ["token"],
     mutationFn: async () => {
       return await axios({
@@ -38,48 +43,37 @@ export default function Login() {
         });
     },
     onSuccess: (data, _variables, _context) => {
-      localStorage.setItem("token", data);
-      queryclient.setQueryData(["token"], data);
+      typeof localStorage !== "undefined" && localStorage.setItem("token", data);
+      // queryclient.setQueryData(["token"], data);
+      setToken(data);
     },
   });
-  const {
-    data: account,
-    isLoading,
-    isInitialLoading,
-  } = useQuery({
-    queryKey: ["account"],
-    queryFn: async (context) => {
-      return await axios({
-        url: `/api/accounts/loadData?token=${token}`,
-        method: "get",
-      })
-        .then((res) => res.data.account)
-        .catch((err) => {
-          dispatch(
-            actions.setMassage({
-              message: err.response.data.err,
-              type: "error",
-            })
-          );
-        });
+
+  const { mutate: accountMutate, isLoading: isAccountLoading } = useMutation({
+    mutationKey: ["account"],
+    mutationFn: async () => {
+      return await axios
+        .get(`/api/accounts/loadData?token=${token}`)
+        .then((res) => res.data.account);
     },
-    enabled: !!token,
-  });
-  useEffect(() => {
-    if (!isLoading && !!account) {
+    onSuccess() {
       router.replace("/dashboard");
-    }
-  }, [account, isLoading, router]);
+    },
+  });
+
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: async (formValue) => {
-      tokenMutation.mutate();
+    onSubmit: (formValue) => {
+      tokenMutate();
     },
   });
-
+  useEffect(() => {
+    if (token) accountMutate();
+  }, [accountMutate, token]);
+  console.log({ isAccountLoading, isTokenLoading });
   return (
     <div className="grid grid-cols-2">
       <div className="h-screen bg-white flex justify-center items-center">
@@ -113,7 +107,10 @@ export default function Login() {
             type="submit"
             className="w-full bg-[#7F5FDA] text-white h-12 text-xl flex justify-center items-center gap-4 font-semibold mt-6 rounded transition-all active:scale-95"
           >
-            login {isInitialLoading && <VscLoading className="animate-spin" />}
+            login{" "}
+            {(isAccountLoading || isTokenLoading) && (
+              <VscLoading className="animate-spin" />
+            )}
           </button>
         </form>
       </div>

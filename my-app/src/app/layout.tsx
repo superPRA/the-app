@@ -17,11 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={
-          inter.className + " bg-lightprimary bg-center bg-cover min-h-screen"
-        }
-      >
+      <body className={inter.className}>
         <RQprovider>
           <ReduxProvider>
             {children}

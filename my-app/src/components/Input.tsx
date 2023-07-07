@@ -2,10 +2,12 @@ import { ChangeEventHandler } from "react";
 
 type Props = {
   label?: string;
-  value: string;
-  onChange: ChangeEventHandler<HTMLInputElement> | undefined;
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
   required?: boolean;
   name: string;
+  placeholder?: string;
+  readonly?: boolean
 };
 export default function Input({
   name,
@@ -13,15 +15,21 @@ export default function Input({
   required,
   value,
   onChange,
+  placeholder,
+  readonly
 }: Props) {
   return (
     <div className="relative py-3 my-4">
       <input
         className="outline-none border border-gray-400 p-3 text-lg rounded-md w-full peer"
         value={value}
-        onChange={onChange}
+        onChange={(e) => {
+          onChange && onChange(e);
+        }}
+        // placeholder={placeholder}
         required={required}
         name={name}
+        readOnly={readonly}
       />
       {label && (
         <label

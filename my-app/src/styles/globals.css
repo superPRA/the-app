@@ -3,7 +3,22 @@
 @tailwind utilities;
 
 
-.bg-lightprimary{
-    background-image: url(./../../public/7889641.jpg);
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  /* background color of the scrollbar track */
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-800;
+  }
+  
+  /* style of the scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+   @apply bg-neutral-600 rounded-full
 }
-
+  
+  /* style of the scrollbar thumb when hovering over it */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400 transition-all 
+  }
