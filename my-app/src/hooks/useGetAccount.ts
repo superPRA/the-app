@@ -4,14 +4,11 @@ import { actions } from "@/redux/slices/masterSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-type Props = {
-  holdQueryActions?: boolean;
-};
 
-// extract the type of the account property
+
 type accountType = NonNullable<apiSuccessResponse["account"]>;
 
-export const useGetAccount = (config?: Props) => {
+export const useGetAccount = () => {
   const dispatch = useAppDispatch();
   const queryclient = useQueryClient();
   const token =
@@ -36,6 +33,6 @@ export const useGetAccount = (config?: Props) => {
 
       return data as accountType;
     },
-    enabled: !!token && !config?.holdQueryActions,
+    enabled: !!token 
   });
 };

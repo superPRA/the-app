@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loading from "./Loading";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { useGetAccount } from "@/hooks/useGetAccount";
 import { BiSearchAlt } from "react-icons/bi";
