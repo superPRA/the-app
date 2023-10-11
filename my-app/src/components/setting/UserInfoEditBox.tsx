@@ -87,7 +87,7 @@ export default function UserInfoEditBox() {
                             peer-data-[value=true]:-top-10 peer-data-[value=true]:-left-10 peer-data-[value=true]:text-cyan-300 peer-data-[value=true]:text-2xl
                           `}
               >
-                {key}
+                {key} 
               </label>
             </div>
             {key === "username" ? (
